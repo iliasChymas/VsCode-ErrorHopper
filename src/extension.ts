@@ -3,26 +3,26 @@ import { capitalize } from './utils';
 import { DiagnosticMessage } from './types';
 
 
-function handleErrorSelection(item: DiagnosticMessage | undefined): void {
+function handleDiagnosticSelection(item: DiagnosticMessage | undefined): void {
   if (!item) return;
 
   vscode.workspace.openTextDocument(item.filePath)
-    .then((doc) => 
-      vscode.window
-        .showTextDocument(doc, {
-          viewColumn: vscode.ViewColumn.Active,
-          // preserveFocus: true,
-        }))
-        .then((editor) => {
-          if (editor) {
-            const position = item.line;
-            editor.selection = new vscode.Selection(position, position);
-            editor.revealRange(
-              new vscode.Range(position, position),
-              vscode.TextEditorRevealType.InCenter
-            );
-          }
-        });
+    .then((doc) =>
+      vscode.window.showTextDocument(doc, {
+        viewColumn: vscode.ViewColumn.Active,
+        // preserveFocus: true,
+      })
+    )
+    .then((editor) => {
+      if (editor) {
+        const position = item.line;
+        editor.selection = new vscode.Selection(position, position);
+        editor.revealRange(
+          new vscode.Range(position, position),
+          vscode.TextEditorRevealType.InCenter
+        );
+      }
+    });
 }
 
 function buildDiagnosticMessages(): DiagnosticMessage[] {
@@ -38,17 +38,17 @@ function buildDiagnosticMessages(): DiagnosticMessage[] {
 }
 
 export function activate(context: vscode.ExtensionContext) {
-    console.log('ErrorHopper extension is now active!');
-    const disposable = vscode.commands.registerCommand('errorhopper.jumpToError', () => {
+    console.log('DiagnosticHopper extension is now active!');
+    const disposable = vscode.commands.registerCommand('diagnostichopper.jumpToDiagnostic', () => {
 	  const presentableDiagnostics = buildDiagnosticMessages();
       vscode.window
         .showQuickPick(presentableDiagnostics, {
-          placeHolder: "Hop to an error!",
+          placeHolder: "Hop to a diagnostic!",
           canPickMany: false,
           matchOnDescription: true,
           matchOnDetail: true,
         })
-        .then(handleErrorSelection);
+        .then(handleDiagnosticSelection);
     });
 
     context.subscriptions.push(disposable);
