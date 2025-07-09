@@ -4,7 +4,9 @@ import { DiagnosticMessage } from './types';
 
 
 function handleDiagnosticSelection(item: DiagnosticMessage | undefined): void {
-  if (!item) return;
+  if (!item) {
+    return;
+  }
 
   vscode.workspace.openTextDocument(item.filePath)
     .then((doc) =>
