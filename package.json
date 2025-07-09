@@ -9,15 +9,33 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "onCommand:diagnostichopper.jumpToDiagnostic"
-  ],
+  "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "diagnostichopper.jumpToDiagnostic",
         "title": "DiagnosticHopper: Jump to Diagnostic"
+      },
+      {
+        "command": "diagnostichopper.hopToDiagnostic",
+        "title": "DiagnosticHopper: Hop to Any Diagnostic"
+      },
+      {
+        "command": "diagnostichopper.hopToError",
+        "title": "DiagnosticHopper: Hop to Error"
+      },
+      {
+        "command": "diagnostichopper.hopToWarning",
+        "title": "DiagnosticHopper: Hop to Warning"
+      },
+      {
+        "command": "diagnostichopper.hopToInfo",
+        "title": "DiagnosticHopper: Hop to Info"
+      },
+      {
+        "command": "diagnostichopper.hopToHint",
+        "title": "DiagnosticHopper: Hop to Hint"
       }
     ]
   },

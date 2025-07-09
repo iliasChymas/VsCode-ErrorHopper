@@ -10,7 +10,6 @@ function handleDiagnosticSelection(item: DiagnosticMessage | undefined): void {
     .then((doc) =>
       vscode.window.showTextDocument(doc, {
         viewColumn: vscode.ViewColumn.Active,
-        // preserveFocus: true,
       })
     )
     .then((editor) => {
@@ -25,22 +24,22 @@ function handleDiagnosticSelection(item: DiagnosticMessage | undefined): void {
     });
 }
 
-function buildDiagnosticMessages(): DiagnosticMessage[] {
+function buildDiagnosticMessages(severity?: vscode.DiagnosticSeverity): DiagnosticMessage[] {
   const diagnostics = vscode.languages.getDiagnostics();
-  return diagnostics.flatMap((diagnostic) =>
-    diagnostic[1].map((dMessage) => ({
-      label: capitalize(dMessage.message),
+  return diagnostics.flatMap(diagnostic =>
+   diagnostic[1]
+   .filter(diagnosticContent => severity === undefined || diagnosticContent.severity === severity)
+   .map((diagnosticContent) => ({
+      label: capitalize(diagnosticContent.message),
       detail: diagnostic[0].path,
-      line: dMessage.range.start,
-      filePath: diagnostic[0],
+      line: diagnosticContent.range.start,
+      filePath: diagnostic[0]
     }))
   );
 }
 
-export function activate(context: vscode.ExtensionContext) {
-    console.log('DiagnosticHopper extension is now active!');
-    const disposable = vscode.commands.registerCommand('diagnostichopper.jumpToDiagnostic', () => {
-	  const presentableDiagnostics = buildDiagnosticMessages();
+export function showDiagnosticsWindow(severity?: vscode.DiagnosticSeverity): void {
+	  const presentableDiagnostics = buildDiagnosticMessages(severity);
       vscode.window
         .showQuickPick(presentableDiagnostics, {
           placeHolder: "Hop to a diagnostic!",
@@ -49,9 +48,39 @@ export function activate(context: vscode.ExtensionContext) {
           matchOnDetail: true,
         })
         .then(handleDiagnosticSelection);
-    });
+}
 
-    context.subscriptions.push(disposable);
+export function activate(context: vscode.ExtensionContext) {
+    console.log('DiagnosticHopper extension is now active!');
+    const commands = [
+      {
+        id: "diagnostichopper.hopToDiagnostic",
+        severity: undefined,
+      },
+      {
+        id: "diagnostichopper.hopToError",
+        severity: vscode.DiagnosticSeverity.Error,
+      },
+      {
+        id: "diagnostichopper.hopToWarning",
+        severity: vscode.DiagnosticSeverity.Warning,
+      },
+      {
+        id: "diagnostichopper.hopToInfo",
+        severity: vscode.DiagnosticSeverity.Information,
+      },
+      {
+        id: "diagnostichopper.hopToHint",
+        severity: vscode.DiagnosticSeverity.Hint,
+      },
+    ];
+    
+    commands.forEach(command => {
+        const disposable = vscode.commands.registerCommand(command.id, () => {
+            showDiagnosticsWindow(command.severity);
+        });
+        context.subscriptions.push(disposable);
+    });
 }
 
 export function deactivate() {}
