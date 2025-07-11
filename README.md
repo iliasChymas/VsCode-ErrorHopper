@@ -9,6 +9,13 @@
 - 🐸 **Hop to any diagnostic** (error, warning, info, or hint) in your workspace using a quick pick menu.
 - 🚀 **Instant navigation**: Select a diagnostic and jump directly to its location in the file.
 - 🎯 **Works with all diagnostics**: Supports diagnostics from any language or extension that uses VS Code's diagnostics API.
+- 🗂️ **Filter by severity**: Use different commands to hop to errors, warnings, info, or hints (coming soon).
+
+---
+
+## Demo
+
+![DiagnosticHopper Demo](static/demo_gif.gif)
 
 ---
 
@@ -23,6 +30,7 @@
 
 ## Requirements
 
+- Visual Studio Code v1.101.0 or higher.
 - No additional dependencies required.
 
 ---
@@ -30,13 +38,6 @@
 ## Extension Settings
 
 This extension does not add any custom settings (yet).
-
----
-
-## Known Issues
-
-- Only shows diagnostics that are currently reported by VS Code diagnostics.
-- If no diagnostics are present, the quick pick will be empty.
 
 ---
 
@@ -57,6 +58,7 @@ Pull requests and suggestions are welcome! Please open an issue to discuss what 
 
 ## License
 
+MIT
 
 ---
 
