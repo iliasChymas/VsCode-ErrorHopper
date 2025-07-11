@@ -58,7 +58,7 @@ Pull requests and suggestions are welcome! Please open an issue to discuss what 
 
 ## License
 
-MIT
+GPL v3
 
 ---
 
